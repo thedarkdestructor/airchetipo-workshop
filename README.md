@@ -40,18 +40,18 @@ cd next-auth-neon-boilerplate
 1. Vai su [supabase.com](https://supabase.com) e fai login
 2. Clicca **New Project**
 3. Scegli un nome, una password per il database e la region (scegli la più vicina a te)
-4. Aspetta che il progetto sia pronto (circa 1 minuto)
+4. Salva la password da qualche parte
+5. Aspetta che il progetto sia pronto 
 
 ---
 
-### Step 3 — Abilita i provider di autenticazione
+### Step 3 — Abilita i provider di autenticazione (Opzionale)
 
 Nel Supabase Dashboard vai su **Authentication → Providers**:
 
 - **GitHub**: Attiva il toggle — funziona subito come managed provider (non serve creare un'OAuth App)
-- **Google**: Attiva il toggle — funziona subito come managed provider (non serve la Google Cloud Console)
+- **Google**: Attiva il toggle — configura Google Cloud Console > APIs & Services > Credentials
 
-> Entrambi sono "managed providers" di Supabase: basta attivare il toggle e funzionano immediatamente per lo sviluppo. Per la produzione, puoi configurare le tue credenziali OAuth.
 
 ---
 
@@ -63,13 +63,10 @@ Nel Supabase Dashboard vai su **Authentication → Providers**:
 cp .env.local.example .env.local
 ```
 
-2. Apri `.env.local` e inserisci i valori dal tuo progetto Supabase:
+2. Clicca il pulsante **Connect** nella top bar di Supabase e inserisci i valori in `.env.local`:
 
-| Variabile | Dove trovarla |
-|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase Dashboard → **Settings → API** → Project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Dashboard → **Settings → API** → anon/public key |
-| `DATABASE_URL` | Supabase Dashboard → **Settings → Database** → Connection string → **URI** (seleziona "Transaction" mode) |
+- **`NEXT_PUBLIC_SUPABASE_URL`** e **`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`**: vai nel tab **App Frameworks** → seleziona **Next.js** → copia i valori dal tab `.env.local`
+- **`DATABASE_URL`**: vai nel tab **Connection String** → Type **URI**, Method **Direct connection** → copia la connection string
 
 > **Attenzione**: nella connection string, sostituisci `[YOUR-PASSWORD]` con la password che hai scelto quando hai creato il progetto.
 
@@ -140,7 +137,7 @@ curl -X POST http://localhost:3000/api/hello \
 ## Troubleshooting
 
 ### "Invalid API key" o errori di autenticazione
-- Verifica che `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` siano corretti in `.env.local`
+- Verifica che `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` siano corretti in `.env.local`
 - Assicurati di non avere spazi extra nei valori
 
 ### "Can't reach database server"
