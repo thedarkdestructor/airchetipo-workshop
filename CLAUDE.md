@@ -89,5 +89,5 @@ const { data } = await supabase.storage.from("bucket").upload("path", file);
 
 ## Environment Variables
 - `NEXT_PUBLIC_SUPABASE_URL` — Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` — Supabase publishable key
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` — Supabase publishable key
 - `DATABASE_URL` — Supabase PostgreSQL connection string (for Prisma)
