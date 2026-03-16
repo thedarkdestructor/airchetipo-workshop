@@ -51,12 +51,11 @@ cd airchetipo-workshop
 cp .env.local.example .env
 ```
 
-2. Clicca il pulsante **Connect** nella top bar di Supabase e inserisci i valori in `.env.local`:
+2. Clicca il pulsante **Connect** nella top bar di Supabase e inserisci i valori in `.env`:
 
-- **`NEXT_PUBLIC_SUPABASE_URL`** e **`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`**: vai nel tab **App Frameworks** → seleziona **Next.js** → copia i valori dal tab `.env.local`
-- **`DATABASE_URL`**: vai nel tab **Connection String** → Type **URI**, Method **Session Pooler** (porta 6543) → copia la connection string
-
+- nel tab **Connection String** → Type **URI**, Method **Session Pooler** (porta 6543) → copia la connection string nella variabile **`DATABASE_URL`** in `.env`
 > **Attenzione**: nella connection string, sostituisci `[YOUR-PASSWORD]` con la password che hai scelto quando hai creato il progetto.
+- nel tab **App Frameworks** → seleziona **Next.js** →  copia i valori **`NEXT_PUBLIC_SUPABASE_URL`** e **`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`** in `.env`
 
 ---
 
