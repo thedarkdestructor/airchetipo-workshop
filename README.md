@@ -1,14 +1,6 @@
 # AIRchetipo Workshop
 
-## Stack
-
-- **Next.js 15** (App Router, Turbopack)
-- **Supabase** (Auth + Storage)
-- **Prisma** (ORM, connected to Supabase PostgreSQL)
-- **Tailwind CSS v4** + **shadcn/ui**
-- **TypeScript**
-
----
+Questo è un workshop pratico in cui costruirai un prodotto digitale da zero usando l'AI come copilota e il framework AIRchetipo come guida metodologica. Il boilerplate di partenza include Next.js 15, Supabase (auth e storage), Prisma, Tailwind CSS v4 e shadcn/ui — tutto già configurato per permetterti di concentrarti sul prodotto, non sull'infrastruttura.
 
 ## Guida Setup (per partecipanti al workshop)
 
