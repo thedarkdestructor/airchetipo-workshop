@@ -19,9 +19,23 @@ Questo è un workshop pratico in cui costruirai un prodotto digitale da zero usa
 2. Clona la tua fork sulla tua macchina:
 
 ```bash
-git clone https://github.com/techreloaded-ar/airchetipo-workshop.git
+git clone https://github.com/TUO-USERNAME/airchetipo-workshop.git
 cd airchetipo-workshop
 ```
+
+#### Alternativa — Setup automatico con script
+
+Se preferisci non fare la fork manualmente, puoi usare lo script di setup che clona il repository e configura il tuo remote in un solo comando:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/techreloaded-ar/airchetipo-workshop/main/setup.sh)
+```
+
+Lo script ti chiederà:
+1. Il nome della cartella del progetto
+2. L'URL del tuo repository remoto
+
+Al termine, il progetto sarà clonato e pushato sul tuo repository.
 
 ---
 
