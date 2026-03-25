@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { toast } from "sonner";
 
 /* ---------- Types ---------- */
@@ -207,6 +207,14 @@ function IngredientGroup({
 /* ---------- Main Page ---------- */
 
 export default function ConfirmPage() {
+  return (
+    <Suspense fallback={<LoadingState />}>
+      <ConfirmContent />
+    </Suspense>
+  );
+}
+
+function ConfirmContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const scanId = searchParams.get("scanId");
