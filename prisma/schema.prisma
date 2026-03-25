@@ -15,6 +15,45 @@ model User {
   image      String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  scans      Scan[]
 
   @@map("users")
+}
+
+enum ScanStatus {
+  PENDING
+  RECOGNIZED
+  CONFIRMED
+}
+
+model Scan {
+  id          String           @id @default(uuid())
+  userId      String
+  imageUrl    String
+  status      ScanStatus       @default(PENDING)
+  createdAt   DateTime         @default(now())
+  user        User             @relation(fields: [userId], references: [id])
+  ingredients ScanIngredient[]
+
+  @@map("scans")
+}
+
+enum IngredientSource {
+  AI
+  MANUAL
+}
+
+model ScanIngredient {
+  id         String           @id @default(uuid())
+  scanId     String
+  name       String
+  emoji      String           @default("")
+  category   String
+  confidence Float
+  detail     String?
+  source     IngredientSource @default(AI)
+  createdAt  DateTime         @default(now())
+  scan       Scan             @relation(fields: [scanId], references: [id], onDelete: Cascade)
+
+  @@map("scan_ingredients")
 }

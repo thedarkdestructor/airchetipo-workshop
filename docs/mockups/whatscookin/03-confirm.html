@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsCookin — Conferma Ingredienti</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* --- Confirm Header --- */
+    .confirm-header {
+      padding: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .confirm-thumb {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, oklch(0.82 0.06 50), oklch(0.72 0.12 35));
+    }
+
+    .confirm-info h1 {
+      font-size: var(--text-lg);
+      font-family: var(--font-display);
+      margin-bottom: 2px;
+    }
+
+    .confirm-info p {
+      font-size: var(--text-xs);
+      color: var(--espresso-muted);
+    }
+
+    .confirm-info .count-highlight {
+      color: var(--tomato);
+      font-weight: 600;
+    }
+
+    /* --- Ingredient Group --- */
+    .ingredient-group {
+      margin-bottom: var(--space-2);
+    }
+
+    .group-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--espresso-muted);
+    }
+
+    .group-count {
+      background: var(--cream-dark);
+      padding: 1px 6px;
+      border-radius: var(--radius-full);
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    /* --- Ingredient Item --- */
+    .ingredient-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      margin: 0 var(--space-3);
+      background: var(--mozzarella);
+      transition: background 0.15s;
+    }
+
+    .ingredient-item:first-of-type {
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .ingredient-item:last-of-type {
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    .ingredient-item:only-of-type {
+      border-radius: var(--radius-lg);
+    }
+
+    .ingredient-item + .ingredient-item {
+      border-top: 1px solid var(--cream-dark);
+    }
+
+    .ingredient-emoji {
+      font-size: 1.5rem;
+      width: 2rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .ingredient-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ingredient-name {
+      font-weight: 500;
+      font-size: var(--text-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .ingredient-detail {
+      font-size: var(--text-xs);
+      color: var(--espresso-muted);
+      margin-top: 1px;
+    }
+
+    .ingredient-remove {
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: var(--ash);
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .ingredient-remove:hover {
+      background: var(--tomato-bg);
+      color: var(--tomato);
+    }
+
+    /* --- Beverage section highlight --- */
+    .beverage-group .ingredient-item {
+      background: var(--olive-bg);
+    }
+
+    .beverage-group .ingredient-item + .ingredient-item {
+      border-top-color: oklch(0.90 0.03 85);
+    }
+
+    .beverage-group .group-header {
+      color: var(--olive-dark);
+    }
+
+    /* --- Add ingredient button --- */
+    .add-ingredient-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      margin: var(--space-3) var(--space-4);
+      padding: var(--space-3);
+      border-radius: var(--radius-lg);
+      border: 1.5px dashed var(--smoke);
+      color: var(--espresso-muted);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .add-ingredient-btn:hover {
+      border-color: var(--tomato-light);
+      color: var(--tomato);
+      background: var(--tomato-bg);
+    }
+
+    .add-icon {
+      font-size: 1.1rem;
+    }
+
+    /* --- Fixed CTA at bottom --- */
+    .fixed-cta {
+      position: fixed;
+      bottom: var(--nav-height);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: var(--max-width);
+      padding: var(--space-3) var(--space-4);
+      background: linear-gradient(to top, var(--cream) 70%, oklch(0.97 0.01 85 / 0));
+      z-index: 50;
+    }
+
+    .fixed-cta .btn {
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Extra bottom padding to account for fixed CTA */
+    .confirm-page .page-content {
+      padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 5rem);
+    }
+
+    /* --- Back button --- */
+    .topbar-back {
+      font-size: 1.2rem;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-full);
+      transition: background 0.15s;
+    }
+
+    .topbar-back:hover {
+      background: var(--smoke);
+    }
+
+    /* --- Desktop --- */
+    @media (min-width: 768px) {
+      .confirm-page .page-content {
+        max-width: 600px;
+        margin: 0 auto;
+        padding-bottom: var(--space-16);
+      }
+
+      .confirm-header {
+        padding: var(--space-6);
+      }
+
+      .ingredient-item {
+        margin: 0 var(--space-6);
+      }
+
+      .add-ingredient-btn {
+        margin: var(--space-4) var(--space-6);
+      }
+
+      .fixed-cta {
+        bottom: 0;
+        max-width: 600px;
+        padding: var(--space-4) var(--space-6);
+      }
+
+      .fixed-cta .btn-full {
+        max-width: 400px;
+      }
+
+      .topbar-back {
+        display: none;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .confirm-page .page-content {
+        max-width: 900px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 var(--space-8);
+        align-items: start;
+      }
+
+      .confirm-header {
+        grid-column: 1 / -1;
+      }
+
+      .ingredient-group {
+        margin: 0 0 var(--space-3);
+      }
+
+      .ingredient-item {
+        margin: 0;
+      }
+
+      .add-ingredient-btn {
+        grid-column: 1 / -1;
+        margin: var(--space-3) 0;
+        max-width: 300px;
+      }
+
+      .fixed-cta {
+        max-width: 900px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="phone-frame confirm-page">
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <a href="02-scan.html" class="topbar-back" aria-label="Indietro">←</a>
+    <span class="topbar-logo">Whats<span>Cookin</span></span>
+    <nav class="topbar-nav">
+      <a href="01-feed.html" class="topbar-nav-link"><span class="link-icon">🏠</span> Feed</a>
+      <a href="02-scan.html" class="topbar-nav-link"><span class="link-icon">📷</span> Scan</a>
+      <a href="05-profile.html" class="topbar-nav-link"><span class="link-icon">👤</span> Profilo</a>
+    </nav>
+    <div class="topbar-actions">
+      <div class="topbar-avatar">M</div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <main class="page-content">
+
+    <!-- Header with scan thumbnail -->
+    <div class="confirm-header animate-in">
+      <div class="confirm-thumb">📸</div>
+      <div class="confirm-info">
+        <h1>Ingredienti trovati</h1>
+        <p>Trovati <span class="count-highlight">8 ingredienti</span> e <span class="count-highlight">2 bevande</span></p>
+      </div>
+    </div>
+
+    <!-- Verdure -->
+    <div class="ingredient-group animate-in animate-in-delay-1">
+      <div class="group-header">
+        🥬 Verdure <span class="group-count">3</span>
+      </div>
+      <div class="ingredient-item">
+        <span class="ingredient-emoji">🍅</span>
+        <div class="ingredient-info">
+          <div class="ingredient-name">
+            Pomodori San Marzano
+            <span class="confidence-dot confidence-dot--high" title="Confidenza alta"></span>
+            <span class="seasonal-badge">🌿</span>
+          </div>
+          <div class="ingredient-detail">Freschi · Di stagione</div>
+        </div>
+        <button class="ingredient-remove" aria-label="Rimuovi">✕</button>
+      </div>
+      <div class="ingredient-item">
+        <span class="ingredient-emoji">🍆</span>
+        <div class="ingredient-info">
+          <div class="ingredient-name">
+            Melanzane
+            <span class="confidence-dot confidence-dot--high" title="Confidenza alta"></span>
+            <span class="seasonal-badge">🌿</span>
+          </div>
+          <div class="ingredient-detail">Fresche · Di stagione</div>
+        </div>
+        <button class="ingredient-remove" aria-label="Rimuovi">✕</button>
+      </div>
+      <div class="ingredient-item">
+        <span class="ingredient-emoji">🧅</span>
+        <div class="ingredient-info">
+          <div class="ingredient-name">
+            Cipolla rossa
+            <span class="confidence-dot confidence-dot--medium" title="Confidenza media"></span>
+          </div>
+          <div class="ingredient-detail">Fresca</div>
+        </div>
+        <button class="ingredient-remove" aria-label="Rimuovi">✕</button>
+      </div>
+    </div>
+
+    <!-- Latticini -->
+    <div class="ingredient-group animate-in animate-in-delay-2">
+      <div class="group-header">
+        🧀 Latticini <span class="group-count">2</span>
+      </div>
+      <div class="ingredient-item">
+        <span class="ingredient-emoji">🧀</span>
+        <div class="ingredient-info">
+          <div class="ingredient-name">
+            Parmigiano Reggiano
+            <span class="confidence-dot confidence-dot--high" title="Confidenza alta"></span>
+          </div>
+          <div class="ingredient-detail">Stagionato 24 mesi</div>
+        </div>
+        <button class="ingredient-remove" aria-label="Rimuovi">✕</button>
+      </div>
+      <div class="ingredient-item">
+        <span class="ingredient-emoji">🥛</span>
+        <div class="ingredient-info">
+          <div class="ingredient-name">
+            Ricotta salata
+            <span class="confidence-dot confidence-dot--low" title="Confidenza bassa"></span>
+          </div>
+          <div class="ingredient-detail">Potrebbe essere feta — tocca per correggere</div>
+        </div>
+        <button class="ingredient-remove" aria-label="Rimuovi">✕</button>
+      </div>
+    </div>
+
+    <!-- Dispensa -->
+    <div class="ingredient-group animate-in animate-in-delay-3">
+      <div class="group-header">
+        🫙 Dispensa <span class="group-count">3</span>
+      </div>
+      <div class="ingredient-item">
+        <span class="ingredient-emoji">🍝</span>
+        <div class="ingredient-info">
+          <div class="ingredient-name">
+            Spaghetti
+            <span class="confidence-dot confidence-dot--high" title="Confidenza alta"></span>
+          </div>
+          <div class="ingredient-detail">Pasta secca</div>
+        </div>
+        <button class="ingredient-remove" aria-label="Rimuovi">✕</button>
+      </div>
+      <div class="ingredient-item">
+        <span class="ingredient-emoji">🧄</span>
+        <div class="ingredient-info">
+          <div class="ingredient-name">
+            Aglio
+            <span class="confidence-dot confidence-dot--high" title="Confidenza alta"></span>
+          </div>
+          <div class="ingredient-detail">Fresco</div>
+        </div>
+        <button class="ingredient-remove" aria-label="Rimuovi">✕</button>
+      </div>
+      <div class="ingredient-item">
+        <span class="ingredient-emoji">🫒</span>
+        <div class="ingredient-info">
+          <div class="ingredient-name">
+            Olio extravergine d'oliva
+            <span class="confidence-dot confidence-dot--high" title="Confidenza alta"></span>
+          </div>
+          <div class="ingredient-detail">Dispensa</div>
+        </div>
+        <button class="ingredient-remove" aria-label="Rimuovi">✕</button>
+      </div>
+    </div>
+
+    <!-- Bevande (highlighted section) -->
+    <div class="ingredient-group beverage-group animate-in animate-in-delay-4">
+      <div class="group-header">
+        🍷 Bevande <span class="group-count">2</span>
+      </div>
+      <div class="ingredient-item">
+        <span class="ingredient-emoji">🍷</span>
+        <div class="ingredient-info">
+          <div class="ingredient-name">
+            Chianti Classico
+            <span class="confidence-dot confidence-dot--high" title="Confidenza alta"></span>
+          </div>
+          <div class="ingredient-detail">Vino rosso · Per abbinamento</div>
+        </div>
+        <button class="ingredient-remove" aria-label="Rimuovi">✕</button>
+      </div>
+      <div class="ingredient-item">
+        <span class="ingredient-emoji">💧</span>
+        <div class="ingredient-info">
+          <div class="ingredient-name">
+            Acqua frizzante
+            <span class="confidence-dot confidence-dot--medium" title="Confidenza media"></span>
+          </div>
+          <div class="ingredient-detail">Bevanda</div>
+        </div>
+        <button class="ingredient-remove" aria-label="Rimuovi">✕</button>
+      </div>
+    </div>
+
+    <!-- Add ingredient -->
+    <button class="add-ingredient-btn">
+      <span class="add-icon">+</span>
+      Aggiungi ingrediente
+    </button>
+
+  </main>
+
+  <!-- Fixed CTA -->
+  <div class="fixed-cta">
+    <a href="04-results.html" class="btn btn-primary btn-full">🍳 Ottieni Ricette</a>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="01-feed.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Feed</span>
+    </a>
+    <a href="02-scan.html" class="nav-item nav-item--scan">
+      <span class="nav-icon">📷</span>
+      <span class="nav-label">Scan</span>
+    </a>
+    <a href="05-profile.html" class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Profilo</span>
+    </a>
+  </nav>
+
+</div>
+
+</body>
+</html>
